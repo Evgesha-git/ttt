@@ -1,11 +1,11 @@
 import React from "react"
 import{Routes, Route, Link} from 'react-router-dom'
-import Authorization from './Authorization';
-import Registration from './Registration';
-import Load from "./Load";
-import Games from "./Games";
-import Board from "./Board";
-import Profile from "./Profile";
+import Authorization from './components/Authorization';
+import Registration from './components/Registration';
+import Load from "./components/Load";
+import Games from "./components/Games";
+import Board from "./components/Board";
+import Profile from "./components/Profile";
 
 function App(){
     return(

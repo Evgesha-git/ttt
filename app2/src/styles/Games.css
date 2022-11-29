@@ -26,6 +26,7 @@ ol, li{
     height: 200px;
     text-align: center;
     width: 200px;
+    color: white;
 }
 
 .square:focus {
@@ -110,4 +111,28 @@ ol, li{
 .anticon-check-circle{
     opacity: 0;
 }
+h3{
+    color: white;
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+    font: small-caps 50px/1 sans-serif;
 
+
+
+}
+.wsdyc{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.wsdyc button{
+    margin-bottom: 20px;
+    color: #ffffff;
+    padding: 20px;
+    width: 50%;
+}

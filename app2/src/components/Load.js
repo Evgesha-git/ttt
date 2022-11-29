@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import './styles/Style.css';
+import '../styles/Style.css';
 function Load(){
     return(
         <section className="load">

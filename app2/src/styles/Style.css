@@ -22,6 +22,7 @@ section{
     font: small-caps bold 24px/1 sans-serif;
 }
 h1{
+
     font-size: 130px;
 }
 button{
@@ -52,7 +53,7 @@ h2{
     margin-bottom: 60px;
 }
 
-form1{
+.form{
     width: 700px;
     height: 600px;
     background: #FFFFFF;

@@ -1,15 +1,13 @@
 import React, {useEffect} from "react";
-import { nanoid } from 'nanoid'
-import {Link, Route, Routes} from 'react-router-dom'
+import {Link, Route, Routes, useNavigate} from 'react-router-dom'
 import Authorization from './Authorization';
 import Profile from './Profile';
 import {useState} from "react";
-import './styles/Style.css';
-import {createUserWithEmailAndPassword, onAuthStateChanged} from "firebase/auth"
-import {auth} from './firebase-config'
+import '../styles/Style.css';
+import {useSelector} from "react-redux";
+import {useActions} from "../hooks/useActions";
 
 function Registration() {
-   // const [users, setUsers]=useState(()=> JSON.parse(localStorage.getItem('users'))||[])
 
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState('')
@@ -17,19 +15,31 @@ function Registration() {
     const [loginError, setLoginError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [passwordError, setPasswordError] = useState('')
-    const [formValid, setFormValid] = useState('')
+    const [formValid, setFormValid] = useState('');
+    const navigate = useNavigate();
+    const {user, loading, error} = useSelector((state) => state.user);
+    const {registerAction} = useActions();
 
 
-
-    const register = async () =>{
+    const register = async (e) =>{
+        e.preventDefault();
         try{
-            const user = await createUserWithEmailAndPassword(auth, email, password,login)
+            await registerAction(email, password, login);
+            console.log(user)
         }catch(error){
             console.log(error.message);
         }
 
 
     }
+    useEffect(() => {
+        if(!error && user && login && password) {
+            navigate('/profile');
+        }else if(!user && login && password){
+            alert('Такой юзверь существует')
+        }
+    }, [error, user])
+
 
     const loginHandler=(e)=>{
         setLogin(e.target.value)
@@ -61,32 +71,18 @@ function Registration() {
         }
     }
     useEffect(()=>{
+        console.log(user)
     if (loginError || emailError || passwordError){
         setFormValid(false)
     }else{
         setFormValid(true)
-    }},[loginError, emailError,passwordError])
+    }},[loginError, emailError,passwordError, user, loading])
 
 
-    /*useEffect(()=> {
-        localStorage.setItem('users', JSON.stringify(users))
-    }, [users])*/
-
-   /* function createNewUser() {
-        const newUser = {
-            id: nanoid(),
-            login: login,
-            email: email,
-            password: password,
-
-        }
-        setUsers((prevUsers) => [newUser, ...prevUsers])
-    }
-*/
 
     return (
         <section className="signup">
-            <form1>
+            <form className='form' onSubmit={register}>
                 <div>
                     <h2>Sign up</h2>
                 </div>
@@ -96,18 +92,12 @@ function Registration() {
                 <div style={{color: 'red'}}>{emailError}</div>
                 <input onChange={passwordHandler} name='password' type="password" placeholder='Enter your password'/>
                 <div style={{color: 'red'}}>{passwordError}</div>
-                <form action='/profile'>
-                    <button disabled={!formValid} onClick={register}>SIGN UP</button>
-                </form>
+                <button type={'submit'} disabled={!formValid} >SIGN UP</button>
                 <div className="aha">
                     Already a member?
-                    <a href="/authorization">Log in</a>
+                    <Link to="/authorization">Log in</Link>
                 </div>
-            </form1>
-            {/*<Routes>
-                <Route path="/authorization" element={<Registration/>}/>
-                <Route path="/profile" element={<Profile/>}/>
-            </Routes>*/}
+            </form>
         </section>
     )
 }
