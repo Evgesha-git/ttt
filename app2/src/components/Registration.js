@@ -35,7 +35,7 @@ function Registration() {
     useEffect(() => {
         if(!error && user && login && password) {
             navigate('/profile');
-        }else if(!user && login && password){
+        }else if(!user && login && password && !loading){
             alert('Такой юзверь существует')
         }
     }, [error, user])

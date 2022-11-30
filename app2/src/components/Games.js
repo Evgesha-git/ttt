@@ -7,6 +7,7 @@ import {useSelector} from "react-redux";
 import { ref, child, push, update, runTransaction} from "firebase/database";
 import {database} from "../utils/firebase-config";
 import {useObject} from "react-firebase-hooks/database";
+import { useActions } from '../hooks/useActions';
 
 
 function Square(props) {
@@ -53,6 +54,7 @@ class Board extends React.Component {
 }
 
 const Game = () => {
+    const {addGames} = useActions();
     const [history, setHistory] = useState([{
         squares: Array(9).fill(null),
     }]);
@@ -61,7 +63,7 @@ const Game = () => {
     const [playerSide, setPlayerSide] = useState('');
     const [status, setStatus] = useState('');
     const {user} = useSelector(state => state.user);
-    const [snapshots, loading, error] = useObject(ref(database, `users/${user.user.uid}`));
+    const [snapshots, loading, error] = useObject(ref(database, `users/${user.userId}`));
 
     const chooseSide = (player) => {
         setPlayerSide(player);
@@ -102,21 +104,6 @@ const Game = () => {
         );
     });
 
-    const setData = (win) => {
-        const userRef = ref(database, `users/${user.user.uid}`);
-        runTransaction(userRef, (data) => {
-            if (data) {
-                data.games += .5;
-                if(win){
-                    data.wins += .5;
-                }else{
-                    data.falls += .5;
-                }
-            }
-            return data;
-        })
-    }
-
     useEffect(() => {
         if(snapshots){
             console.log(snapshots.val());
@@ -125,9 +112,17 @@ const Game = () => {
         if (winner){
             setStatus(`Выйграл ${winner}`);
             if(winner.toUpperCase() === playerSide){
-                setData(true);
+                const game = {
+                    date: new Date(),
+                    type: 'win',
+                }
+                addGames(user.userId, user, game, true);
             }else{
-                setData(false);
+                const game = {
+                    date: new Date(),
+                    type: 'win',
+                }
+                addGames(user.userId, user, game, false);
             }
         }else {
             setStatus(`Следующий ход: ${isNext ? "X" : "O"}`);

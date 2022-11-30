@@ -46,7 +46,7 @@ function Profile() {
                     </Link>
                 </nav>
                 <div className="title">
-                    <h1>{user.user.email}</h1>
+                    <h1>{user.name}</h1>
                 </div>
                 <div>
                     <button onClick={logOutComp}>Log out</button>
